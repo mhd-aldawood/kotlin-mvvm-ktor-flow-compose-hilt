@@ -32,8 +32,8 @@ import com.example.kotlintest.data.source.network.User
 
 @Composable
 fun UserScreen(viewModel: UserViewModel=hiltViewModel()) {
-//    val result by viewModel.response.collectAsStateWithLifecycle()
-    val result by viewModel.result.collectAsStateWithLifecycle()
+    val result by viewModel.response.collectAsStateWithLifecycle()
+
     if(result is ApiResult.Success)
         (result as ApiResult.Success).data?.let { UserDetailsScreen(users = it) }
 }

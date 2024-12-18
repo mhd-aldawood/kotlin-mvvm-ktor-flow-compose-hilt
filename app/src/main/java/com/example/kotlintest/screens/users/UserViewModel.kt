@@ -24,14 +24,8 @@ class UserViewModel @Inject constructor(
     private val _response = MutableStateFlow<ApiResult<List<User>>>(ApiResult.Loading())
     val response = _response.asStateFlow()
 
-    val result=apiService
-        .getUsers()
-        .flowOn(Dispatchers.IO)
-        .catch { _response.value = ApiResult.Error(it.message ?: "Something went wrong") }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),ApiResult.Loading())
-
     init {
-//        getUsers()
+        getUsers()
     }
 
     private fun getUsers() {
@@ -53,6 +47,7 @@ sealed class ApiResult<T>(val data: T? = null, val error: String? = null) {
     class Error<T>(error: String) : ApiResult<T>(error = error)
     class Loading<T> : ApiResult<T>()
 }
+
 sealed interface MyModelUiState {
     object Loading : MyModelUiState
     data class Error(val throwable: Throwable) : MyModelUiState
