@@ -25,18 +25,52 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        // Important: change the keystore for a production deployment
+        create("release") {
+            // get from env variables
+            val userKeystore = File(System.getProperty("user.home"), ".android/debug.keystore")
+            val localKeystore = File("/Users/mohamad/AndroidStudioProjects/kotlintest/key.file")
+            val hasKeyInfo = userKeystore.exists()
 
+            storeFile = if (hasKeyInfo) userKeystore else localKeystore
+            storePassword = if (hasKeyInfo) "android" else System.getenv("compose_store_password")
+            keyAlias = if (hasKeyInfo) "androiddebugkey" else System.getenv("compose_key_alias")
+            keyPassword = if (hasKeyInfo) "android" else System.getenv("compose_key_password")
+
+        }
+    }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = "\"https://api.mockapi.com/\""
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"b0742dc665ee4c659c06add509604c3e\""
+            )
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
-            buildConfigField(type = "String", name = "BASE_URL", value =  "\"https://api.mockapi.com/\"")
-            buildConfigField(type = "String", name = "API_KEY", value = "\"b0742dc665ee4c659c06add509604c3e\"")
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = "\"https://api.mockapi.com/\""
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"b0742dc665ee4c659c06add509604c3e\""
+            )
         }
     }
     compileOptions {
@@ -107,13 +141,19 @@ dependencies {
     implementation(libs.io.ktor.serialization.kotlinx.json)
     implementation(libs.io.ktor.logging)
     implementation(libs.kotlinx.serialization.json)
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
-//    androidTestImplementation(platform(libs.androidx.compose.bom))
-//    androidTestImplementation(libs.androidx.ui.test.junit4)
-//    debugImplementation(libs.androidx.ui.tooling)
-//    debugImplementation(libs.androidx.ui.test.manifest)
+//testing
+    // Dependencies for local unit tests
+    testImplementation(composeBom)
+    testImplementation(libs.junit4)
+    testImplementation(libs.androidx.archcore.testing)
+    testImplementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.navigation.testing)
+    testImplementation(libs.androidx.test.espresso.core)
+    testImplementation(libs.androidx.test.espresso.contrib)
+    testImplementation(libs.androidx.test.espresso.intents)
+    testImplementation(libs.google.truth)
+    testImplementation(libs.androidx.compose.ui.test.junit)
     // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.compiler)

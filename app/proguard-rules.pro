@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Keep all classes in the package com.example.kotlintest.data.source.network
+-keep class com.example.kotlintest.data.source.network.** { *; }
+
+# Keep all annotations and fields in the package (if required by serialization)
+-keepattributes *Annotation*
+-dontwarn org.slf4j.impl.StaticLoggerBinder
