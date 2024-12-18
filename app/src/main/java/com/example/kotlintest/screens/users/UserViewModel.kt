@@ -29,23 +29,6 @@ class UserViewModel @Inject constructor(
         .flowOn(Dispatchers.IO)
         .catch { _response.value = ApiResult.Error(it.message ?: "Something went wrong") }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),ApiResult.Loading())
-
-    init {
-//        getUsers()
-    }
-
-    private fun getUsers() {
-        viewModelScope.launch {
-            apiService
-                .getUsers()
-                .flowOn(Dispatchers.IO)//defaultDispatcher
-                .catch { _response.value = ApiResult.Error(it.message ?: "Something went wrong") }
-                .collect {
-                    _response.value = it
-                }
-
-        }
-    }
 }
 
 sealed class ApiResult<T>(val data: T? = null, val error: String? = null) {
