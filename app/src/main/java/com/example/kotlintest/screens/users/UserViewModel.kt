@@ -1,5 +1,7 @@
 package com.example.kotlintest.screens.users
 
+import android.annotation.SuppressLint
+import android.os.Trace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlintest.data.source.network.ApiService
@@ -48,8 +50,3 @@ sealed class ApiResult<T>(val data: T? = null, val error: String? = null) {
     class Loading<T> : ApiResult<T>()
 }
 
-sealed interface MyModelUiState {
-    object Loading : MyModelUiState
-    data class Error(val throwable: Throwable) : MyModelUiState
-    data class Success(val data: List<String>) : MyModelUiState
-}

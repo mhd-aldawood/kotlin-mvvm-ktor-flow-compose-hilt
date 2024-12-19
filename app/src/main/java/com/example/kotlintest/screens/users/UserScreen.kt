@@ -1,5 +1,9 @@
 package com.example.kotlintest.screens.users
 
+import android.os.Build
+import android.os.Trace
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +37,6 @@ import com.example.kotlintest.data.source.network.User
 @Composable
 fun UserScreen(viewModel: UserViewModel=hiltViewModel()) {
     val result by viewModel.response.collectAsStateWithLifecycle()
-
     if(result is ApiResult.Success)
         (result as ApiResult.Success).data?.let { UserDetailsScreen(users = it) }
 }
