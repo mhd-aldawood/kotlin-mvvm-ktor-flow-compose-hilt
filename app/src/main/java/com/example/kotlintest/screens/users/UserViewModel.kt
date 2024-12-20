@@ -31,7 +31,7 @@ class UserViewModel @Inject constructor(
     }
 
     private fun getUsers() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             apiService
                 .getUsers()
                 .flowOn(Dispatchers.IO)//defaultDispatcher
